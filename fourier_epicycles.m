@@ -100,9 +100,9 @@ end
 
 % PLOTTEO
 cla; % Despejando los axes
-% Note that viscircles do not clear the axes and thus, they
-% should be cleared in order to avoid lagging issues due to
-% the amount of objects that are stacked
+% Tenga en cuenta que los círculos no despejan los ejes y por lo tanto, 
+% deben ser despejados para evitar problemas de retraso debido a la 
+% cantidad de objetos que están apilados.
 % CirCULOS
 viscircles(handle, centers, radius, 'Color', 0.5 * [1, 1, 1], 'LineWidth', 0.1);
 hold on;

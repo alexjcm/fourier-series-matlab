@@ -1,25 +1,4 @@
 function varargout = fourier_series(varargin)
-% fourier_series MATLAB code for fourier_series.fig
-%      fourier_series, by itself, creates a new fourier_series or raises the existing
-%      singleton*.
-%
-%      H = fourier_series returns the handle to a new fourier_series or the handle to
-%      the existing singleton*.
-%
-%      fourier_series('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in fourier_series.M with the given input arguments.
-%
-%      fourier_series('Property','Value',...) creates a new fourier_series or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before fourier_series_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to fourier_series_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -39,11 +18,10 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-
 % --- Se ejecuta justo antes de que fourier_series se haga visible.
-function fourier_series_OpeningFcn(hObject, eventdata, handles, varargin)
-set(handles.edit3,'visible','off');
-set(handles.text12,'visible','off');
+function fourier_series_OpeningFcn(hObject, ~, handles, varargin)
+set(handles.input_function,'visible','off');
+set(handles.txt_function,'visible','off');
 % componentes para el trazado manual
 set(handles.draw_axes,'visible','off');
 set(handles.button_draw_reset,'visible','off');
@@ -51,26 +29,6 @@ set(handles.button_draw_ok,'visible','off');
 set(handles.button_minus,'visible','off');
 set(handles.text_num_circles,'visible','off');
 set(handles.button_add,'visible','off');
-
-
-% t = 0:0.0001:0.5;
-% y = square(2*pi*5*t);
-% axes(handles.axes1)
-% plot(t,y)
-% grid on
-% axis([0 0.5 -1.5 1.5])
-
-% x = t;
-% y = zeros(size(x));%
-% for k=1:1
-%     for i=1:length(x)
-%         y(i) = y(i)+(2/pi)*(1-(-1)^k)*sin(2*pi*5*k*x(i))/k;
-%     end
-% end%
-% axes(handles.axes2);
-% axis([0 0.5 -2 2]);
-% plot(x,y);
-% grid on
 
 % Choose default command line output for fourier_series
 handles.output = hObject;
@@ -83,20 +41,20 @@ set_up_the_drawing(handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function lineEdit_CreateFcn(hObject, eventdata, handles)
+function input_iterations_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
 % --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
+function input_function_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 % --- Executes during object creation, after setting all properties.
-function functionEdit_CreateFcn(hObject, eventdata, handles)
+function menu_waves_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -107,46 +65,66 @@ varargout{1} = handles.output;
 
 
 %%
-% --- Executes on selection change in functionEdit.
-function functionEdit_Callback(hObject, eventdata, handles)
-index = handles.functionEdit.Value;
-% si se selecciona el index 4 es decir: Onda personalizada se activaran los
-% componetes indicados a continuacion
+% --- Executes on selection change in menu_waves.
+function menu_waves_Callback(hObject, eventdata, handles)
+index = handles.menu_waves.Value;
+% si se selecciona el index 4 los componetes respectivos se activaran
 if index == 4
-    set(handles.edit3,'visible','on');
-    set(handles.text12,'visible','on');
-    set(handles.axes1,'visible','on');
-    set(handles.draw_axes,'visible','off');
-elseif index == 5
-    cla(handles.axes1);
-    set(handles.edit3,'visible','off');
-    set(handles.text12,'visible','off');
-    set(handles.axes1,'visible','off');
-    set(handles.draw_axes,'visible','on');
-    set(handles.button_draw_reset,'visible','on');
-    set(handles.button_draw_ok,'visible','on');
-    set(handles.button_minus,'visible','on');
-    set(handles.text_num_circles,'visible','on');
-    set(handles.button_add,'visible','on');
-else
-    set(handles.edit3,'visible','off');
-    set(handles.text12,'visible','off');
+    cla(handles.draw_axes);
     set(handles.draw_axes,'visible','off');
     set(handles.button_draw_reset,'visible','off');
     set(handles.button_draw_ok,'visible','off');
     set(handles.button_minus,'visible','off');
     set(handles.text_num_circles,'visible','off');
     set(handles.button_add,'visible','off');
-    set(handles.axes1,'visible','on');
+    set(handles.dinamic_axes,'visible','on');
+    set(handles.input_function,'visible','on');
+    set(handles.txt_function,'visible','on');
+    set(handles.static_axes,'visible','on');
+    set(handles.txt_iterations,'visible','on');
+    set(handles.input_iterations,'visible','on');
+    set(handles.button_calculate,'visible','on');
+elseif index == 5 % Prepara la interfaz para Dibujar una onda
+    cla(handles.static_axes);
+    cla(handles.dinamic_axes);
+    set(handles.dinamic_axes,'visible','off');
+    set(handles.txt_iterations,'visible','off');
+    set(handles.input_iterations,'visible','off');
+    set(handles.button_calculate,'visible','off');
+    set(handles.input_function,'visible','off');
+    set(handles.txt_function,'visible','off');
+    set(handles.static_axes,'visible','off');
+    set(handles.draw_axes,'visible','on');
+    set(handles.button_draw_reset,'visible','on');
+    set(handles.button_draw_ok,'visible','on');
+    set(handles.button_draw_ok,'Enable','off')
+    set(handles.button_minus,'visible','on');
+    set(handles.text_num_circles,'visible','on');
+    set(handles.button_add,'visible','on');    
+else
+    cla(handles.draw_axes);
+    set(handles.input_function,'visible','off');
+    set(handles.txt_function,'visible','off');
+    set(handles.draw_axes,'visible','off');
+    set(handles.button_draw_reset,'visible','off');
+    set(handles.button_draw_ok,'visible','off');
+    set(handles.button_minus,'visible','off');
+    set(handles.text_num_circles,'visible','off');
+    set(handles.button_add,'visible','off');
+    set(handles.dinamic_axes,'visible','on');
+    set(handles.txt_iterations,'visible','on');
+    set(handles.input_iterations,'visible','on');
+    set(handles.button_calculate,'visible','on');
+    set(handles.static_axes,'visible','on');
 end
 
 
 % --- Esta función se  ejecuta al presionar el boton calcular.
-function updateButton_Callback(hObject, eventdata, handles)
-allItems = handles.functionEdit.String;
-index = handles.functionEdit.Value;
+function button_calculate_Callback(hObject, eventdata, handles)
+allItems = handles.menu_waves.String;
+index = handles.menu_waves.Value;
 func = allItems{index};
-txt_n = get(handles.lineEdit,'String');
+txt_n = get(handles.input_iterations,'String');
 
 n = str2num(txt_n);
 L = 0.5; % L es horizontal
@@ -161,7 +139,7 @@ switch index
         t = 0:h:L; % 0, 0.0001, 0.0002,..., 0.5
         y = square(2*pi*5*t);%  1, 1.., -1, -1.., 1, 1
         % Seleccione el eje sobre el que desea trazar.
-        axes(handles.axes1)
+        axes(handles.static_axes)
         plot(t,y) %plot(X, Y) grafica lineas 2D
         axis([0 0.5 -1.5 1.5])
         grid on
@@ -178,7 +156,7 @@ switch index
             end
         end
         
-        axes(handles.axes2);
+        axes(handles.dinamic_axes);
         axis([0 0.5 -1.5 1.5]);
         plot(x, y);
         grid on
@@ -189,7 +167,7 @@ switch index
         t = 0:h:L; % 0, 0.0001, 0.0002,..., 0.5
         y = sawtooth(2*pi*5*t);
         % Seleccione el eje sobre el que desea trazar.
-        axes(handles.axes1);
+        axes(handles.static_axes);
         plot(t,y)
         grid on
         axis([0 0.5 -1.5 1.5])
@@ -204,7 +182,7 @@ switch index
             end
         end
         y(i) = y(i) + 1/2;
-        axes(handles.axes2);
+        axes(handles.dinamic_axes);
         plot(t,y)
         grid on
         axis([0 0.5 -1.5 1.5])
@@ -215,7 +193,7 @@ switch index
         t = 0:h:L; % 0, 0.0001, 0.0002,..., 0.5
         y = sawtooth(2*pi*5*t, 1/2); % 1/2 convierte en triangular al dividir
         % Seleccione el eje sobre el que desea trazar.
-        axes(handles.axes1);
+        axes(handles.static_axes);
         plot(t,y)
         grid on
         axis([0 0.5 -1.5 1.5])
@@ -230,26 +208,26 @@ switch index
             end
         end
         
-        axes(handles.axes2);
+        axes(handles.dinamic_axes);
         plot(t,y)
         grid on
         axis([0 0.5 -1.5 1.5])
         
         
     case 4
-        %% TODO: Gráfico de una onda personalizada
-        myedit3 = get(handles.edit3,'String');
+        %% Gráfico de una onda personalizada
+        myedit3 = get(handles.input_function,'String');
         if myedit3 == ""
             msg = msgbox('Ingrese una función', 'Empty Value', 'error');
             th = findall(msg, 'Type', 'Text');    %get handle to text within msgbox
             th.FontSize = 12;
         else
             syms x s
-            fun = get(handles.edit3, 'string');% obtiene la función desde la GUI
+            fun = get(handles.input_function, 'string');% obtiene la función desde la GUI
             fun = str2sym(fun);
             % fun = abs(x);
             % fun = cos(2*x) - 2;
-            per = 2; % perido de la funcion
+            per = 2; % periodo de la funcion
             lmin = 0; % inicio de la funcion
             A0 =((2/per)*int((fun*cos(2*pi*0*1/per)), x, lmin, per+lmin)) / 2;
             s = A0;
@@ -262,7 +240,7 @@ switch index
                 s = s + as + bs;
             end
             
-            axes(handles.axes2);
+            axes(handles.dinamic_axes);
             fplot(s,[lmin, 4*per + lmin]);
             grid on
             
@@ -272,7 +250,7 @@ switch index
 end
 
 
-% --- Se ejecuta cuando se presiona el boton Ejecutar.
+% --- Se ejecuta cuando se presiona el boton Dinujar.
 function button_draw_ok_Callback(hObject, eventdata, handles)
 global xy;
 if ~isempty(xy)
@@ -280,10 +258,11 @@ if ~isempty(xy)
     fourier_epicycles(xy(:,1), xy(:,2), n);
 end
 
-% --- Se ejecuta cuando se presiona el boton Limpiar.
+% --- Se ejecuta cuando se presiona el boton Restablecer.
 function button_draw_reset_Callback(hObject, eventdata, handles)
 global xy;
 cla(handles.draw_axes);
+set(handles.text_num_circles,'String', num2str(0));
 xy = [];
 set_up_the_drawing(handles);
 
@@ -309,21 +288,23 @@ function set_up_the_drawing(handles)
 global xy;
 xy = [];
 try
-    % Funcionalidad de dibujo
-    title(handles.draw_axes,'Dibuja una figura');
+    % Funcionalidad dibujar
+    title(handles.draw_axes,'Dibuje una figura', 'Color', 'b');
     hFH = imfreehand();
-    if isempty(hFH)        
+    if isempty(hFH)
         return; % Saltar...
     end
+    
     xy = hFH.getPosition;
     xy = [xy; xy(1,:)];
     delete(hFH);
     xCoordinates = xy(:, 1);
     yCoordinates = xy(:, 2);
-    plot(xCoordinates, yCoordinates, 'r', 'LineWidth', 2);
+    plot(xCoordinates, yCoordinates, 'b', 'LineWidth', 2);
     hold off;
-    
-    % Establece el número de círculos por defecto.
+    % Establece el numero de círculos por defecto.
     set(handles.text_num_circles,'String', size(xy,1));
+    % Habilita el boton Dibujar
+    set(handles.button_draw_ok,'Enable','on')
 catch me
 end
